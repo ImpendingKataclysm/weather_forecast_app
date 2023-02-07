@@ -26,20 +26,20 @@ if city and country_code and option and days:
 
 try:
     filtered_data = get_data(city, country_code, days)
-    match option:
-        case "Temperature":
-            dates = [datum["dt_txt"] for datum in filtered_data]
-            temperatures = [datum["main"]["temp"] for datum in filtered_data]
-            figure = px.line(x=dates, y=temperatures, labels={"x": "Dates",
-                                                              "y": "Temperatures"})
-            st.plotly_chart(figure)
-        case "Sky":
-            images = {"Clear": "images/clear.png",
-                      "Clouds": "images/cloud.png",
-                      "Rain": "images/rain.png",
-                      "Snow": "images/snow.png"}
-            sky_conditions = [datum["weather"][0]["main"] for datum in filtered_data]
-            image_paths = [images[condition] for condition in sky_conditions]
-            st.image(image_paths, width=100)
+    if option == "Temperature":
+        dates = [datum["dt_txt"] for datum in filtered_data]
+        temperatures = [datum["main"]["temp"] for datum in filtered_data]
+        figure = px.line(x=dates, y=temperatures, labels={"x": "Dates",
+                                                          "y": "Temperatures"})
+        st.plotly_chart(figure)
+    elif option == "Sky":
+        images = {"Clear": "images/clear.png",
+                  "Clouds": "images/cloud.png",
+                  "Rain": "images/rain.png",
+                  "Snow": "images/snow.png"}
+        sky_conditions = [datum["weather"][0]["main"] for datum in filtered_data]
+        image_paths = [images[condition] for condition in sky_conditions]
+        st.image(image_paths, width=100)
+
 except KeyError:
     st.write("Location not found")
